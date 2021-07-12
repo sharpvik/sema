@@ -5,7 +5,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 
@@ -35,34 +34,17 @@ func init() {
 
 func main() {
 	label, err := label()
-	if err != nil {
-		log.Fatal(err)
-	}
+	abort(err)
 
 	scope, err := scope()
-	if err != nil {
-		log.Fatal(err)
-	}
+	abort(err)
 
 	message, err := message()
-	if err != nil {
-		log.Fatal(err)
-	}
+	abort(err)
 
-	command := fmt.Sprintf("%s(%s): %s", label, scope, message)
-	fmt.Println("Commit: ", Green(command), "\n")
-
-	commit := exec.Command("git", "commit", "-m", command)
-
-	var out bytes.Buffer
-	commit.Stdout = &out
-
-	if err = commit.Run(); err != nil {
-		fmt.Println(Red(out.String()))
-		fmt.Println(Red(err.Error()))
-		return
-	}
-	fmt.Println(out.String())
+	result := fmt.Sprintf("%s(%s): %s", label, scope, message)
+	display(result)
+	commit(result)
 }
 
 func label() (choice string, err error) {
@@ -100,4 +82,26 @@ func message() (msg string, err error) {
 	prompt := promptui.Prompt{Label: "Commit message"}
 	msg, err = prompt.Run()
 	return
+}
+
+func abort(err error) {
+	if err != nil {
+		os.Exit(1)
+	}
+}
+
+func display(message string) {
+	fmt.Println("Commit: ", Green(message), "\n")
+}
+
+func commit(message string) {
+	commit := exec.Command("git", "commit", "-m", message)
+	var out bytes.Buffer
+	commit.Stdout = &out
+	if err := commit.Run(); err != nil {
+		fmt.Println(Red(out.String()))
+		fmt.Println(Red(err.Error()))
+		return
+	}
+	fmt.Println(out.String())
 }
