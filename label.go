@@ -13,31 +13,31 @@ func (label *Label) String() string {
 
 var labels = [7]Label{
 	{
-		tag:         "Feat",
+		tag:         "feat",
 		description: "new feature for the user",
 	},
 	{
-		tag:         "Fix",
+		tag:         "fix",
 		description: "bug fix for the user",
 	},
 	{
-		tag:         "Docs",
+		tag:         "docs",
 		description: "changes to the documentation",
 	},
 	{
-		tag:         "Style",
+		tag:         "style",
 		description: "formatting with no production code change",
 	},
 	{
-		tag:         "Refactor",
+		tag:         "refactor",
 		description: "refactoring production code",
 	},
 	{
-		tag:         "Test",
+		tag:         "test",
 		description: "adding missing tests, refactoring tests",
 	},
 	{
-		tag:         "Chore",
+		tag:         "chore",
 		description: "updating grunt tasks",
 	},
 }
