@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"errors"
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -11,6 +10,7 @@ import (
 
 	. "github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
+	"github.com/pborman/getopt/v2"
 )
 
 func help() {
@@ -23,8 +23,8 @@ func help() {
 }
 
 func init() {
-	h := flag.Bool("help", false, "Display help message")
-	flag.Parse()
+	h := getopt.BoolLong("help", 'h', "Display help message")
+	getopt.Parse()
 	if *h {
 		help()
 		os.Exit(0)
