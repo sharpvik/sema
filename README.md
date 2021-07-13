@@ -21,15 +21,15 @@ TYPE(SCOPE): MESSAGE
 Where `SCOPE` tells you about the scope of changes, `MESSAGE` summarises those
 in a concise way, and `TYPE` is a short label from the following:
 
-- `Feat`: new feature for the user
-- `Fix`: bug fix for the user
-- `Docs`: changes to the documentation
-- `Style`: formatting with no production code change
-- `Refactor`: refactoring production code
-- `Test`: adding missing tests, refactoring tests
-- `Chore`: updating grunt tasks
+- `feat`: new feature for the user
+- `fix`: bug fix for the user
+- `docs`: changes to the documentation
+- `style`: formatting with no production code change
+- `refactor`: refactoring production code
+- `test`: adding missing tests, refactoring tests
+- `chore`: updating grunt tasks
 
-> You can see the list of these labels with explanations using `sema -help`.
+> You can see the list of these labels with explanations using `sema --help`.
 
 ## Installation
 
@@ -39,11 +39,19 @@ go install github.com/sharpvik/sema  # => $GOPATH/bin/sema
 
 **NOTICE:** Make sure that your `$GOPATH/bin` is in `$PATH`!
 
+**HACK:** After the default installation, the `sema` command will be available.
+However, if you rename that binary file to `git-sema`, you will be able to use
+it as follows (as if it's part of the default `git` tools):
+
+```bash
+git sema
+```
+
 ## Usage
 
 ```bash
-sema -help  # if you need a hint
-sema        # to commit changes in current repo
+sema --help  # if you need a hint
+sema         # to commit changes in current repo
 ```
 
 ![label](img/label.png)
