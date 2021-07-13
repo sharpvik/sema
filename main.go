@@ -82,7 +82,7 @@ func abort(err error) {
 }
 
 func display(message string) {
-	fmt.Println("Commit: ", Green(message), "\n")
+	fmt.Println("Commit:", Green(message), "\n")
 }
 
 func commit(message string) {
