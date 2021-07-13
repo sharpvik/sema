@@ -7,27 +7,26 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 
 	. "github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 )
 
-const help = `Labels explained:
-
-    Feat:     new feature for the user
-    Fix:      bug fix for the user
-    Docs:     changes to the documentation
-    Style:    formatting with no production code change
-    Refactor: refactoring production code
-    Test:     adding missing tests, refactoring tests
-    Chore:    updating grunt tasks
-`
+func help() {
+	var builder strings.Builder
+	builder.WriteString("Labels explained:\n\n")
+	for _, label := range labels {
+		builder.WriteString("    " + label.String() + "\n")
+	}
+	fmt.Println(builder.String())
+}
 
 func init() {
 	h := flag.Bool("help", false, "Display help message")
 	flag.Parse()
 	if *h {
-		fmt.Println(help)
+		help()
 		os.Exit(0)
 	}
 }
@@ -50,15 +49,7 @@ func main() {
 func label() (choice string, err error) {
 	prompt := promptui.Select{
 		Label: "Select commit label",
-		Items: []string{
-			"Feat",
-			"Fix",
-			"Docs",
-			"Style",
-			"Refactor",
-			"Test",
-			"Chore",
-		},
+		Items: tagsOnly(),
 	}
 	_, choice, err = prompt.Run()
 	return
@@ -66,7 +57,7 @@ func label() (choice string, err error) {
 
 func scope() (string, error) {
 	valiadtor := func(input string) (err error) {
-		if len(input) > 10 {
+		if len(input) > 15 {
 			return errors.New("input too long")
 		}
 		return
