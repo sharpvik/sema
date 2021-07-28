@@ -14,3 +14,9 @@ bin/
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# AUR package information
+pkg/
+*.zst
+sema/
+src/
