@@ -11,7 +11,7 @@ func (label *Label) String() string {
 	return fmt.Sprintf("%-10s%s", label.tag, label.description)
 }
 
-var labels = [7]Label{
+var labels = [8]Label{
 	{
 		tag:         "feat",
 		description: "new feature for the user",
@@ -35,6 +35,10 @@ var labels = [7]Label{
 	{
 		tag:         "test",
 		description: "adding missing tests, refactoring tests",
+	},
+	{
+		tag:         "perf",
+		description: "performance improvements",
 	},
 	{
 		tag:         "chore",
