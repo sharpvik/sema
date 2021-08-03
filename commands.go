@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func explain() {
+func more() {
 	var builder strings.Builder
 	builder.WriteString("Labels explained:\n\n")
 	for _, label := range labels {

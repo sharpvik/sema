@@ -27,7 +27,7 @@ func init() {
 		getopt.Usage()
 		os.Exit(0)
 	} else if *flags.more {
-		explain()
+		more()
 	}
 }
 
