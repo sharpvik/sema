@@ -1,98 +1,42 @@
 package main
 
 import (
-	"bytes"
-	"errors"
-	"fmt"
-	"os"
-	"os/exec"
-	"strings"
-
-	. "github.com/logrusorgru/aurora"
-	"github.com/manifoldco/promptui"
 	"github.com/pborman/getopt/v2"
+	"os"
 )
 
-func help() {
-	var builder strings.Builder
-	builder.WriteString("Labels explained:\n\n")
-	for _, label := range labels {
-		builder.WriteString("    " + label.String() + "\n")
-	}
-	fmt.Println(builder.String())
+type flagsStore struct {
+	add  *bool
+	push *bool
+	help *bool
+	more *bool
 }
 
+var flags = flagsStore{}
+
 func init() {
-	h := getopt.BoolLong("help", 'h', "Display help message")
+	flags.help = getopt.BoolLong("help", 'h', "Display help message")
+	flags.more = getopt.BoolLong("more", 'm', "Explain commit types")
+	flags.add = getopt.BoolLong("add", 'a', "Begin with running 'git add'")
+	flags.push = getopt.BoolLong(
+		"push", 'p', "Run 'git push' on successful commit")
+
 	getopt.Parse()
-	if *h {
-		help()
+
+	if *flags.help {
+		getopt.Usage()
 		os.Exit(0)
+	} else if *flags.more {
+		explain()
 	}
 }
 
 func main() {
-	label, err := label()
-	abort(err)
-
-	scope, err := scope()
-	abort(err)
-
-	message, err := message()
-	abort(err)
-
-	result := fmt.Sprintf("%s(%s): %s", label, scope, message)
-	display(result)
-	commit(result)
-}
-
-func label() (choice string, err error) {
-	prompt := promptui.Select{
-		Label: "Select commit label",
-		Items: tagsOnly(),
+	if *flags.add {
+		add()
 	}
-	_, choice, err = prompt.Run()
-	return
-}
-
-func scope() (string, error) {
-	valiadtor := func(input string) (err error) {
-		if len(input) > 15 {
-			return errors.New("input too long")
-		}
-		return
+	commit()
+	if *flags.push {
+		push()
 	}
-	prompt := promptui.Prompt{
-		Label:    "Change scope",
-		Validate: valiadtor,
-	}
-	return prompt.Run()
-}
-
-func message() (msg string, err error) {
-	prompt := promptui.Prompt{Label: "Commit message"}
-	msg, err = prompt.Run()
-	return
-}
-
-func abort(err error) {
-	if err != nil {
-		os.Exit(1)
-	}
-}
-
-func display(message string) {
-	fmt.Println("Commit:", Green(message), "\n")
-}
-
-func commit(message string) {
-	commit := exec.Command("git", "commit", "-m", message)
-	var out bytes.Buffer
-	commit.Stdout = &out
-	if err := commit.Run(); err != nil {
-		fmt.Println(Red(out.String()))
-		fmt.Println(Red(err.Error()))
-		return
-	}
-	fmt.Println(out.String())
 }
