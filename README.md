@@ -27,9 +27,10 @@ in a concise way, and `TYPE` is a short label from the following:
 - `style`: formatting with no production code change
 - `refactor`: refactoring production code
 - `test`: adding missing tests, refactoring tests
+- `perf`: performance improvements
 - `chore`: updating grunt tasks
 
-> You can see the list of these labels with explanations using `sema --help`.
+> You can see the list of these labels with explanations using `sema --more`.
 
 ## Installation
 
@@ -50,8 +51,20 @@ git sema
 ## Usage
 
 ```bash
-sema --help  # if you need a hint
-sema         # to commit changes in current repo
+sema --help  # if you need a usage hint
+sema --more  # see all label descriptions
+sema --add   # run 'git add .' before all else
+sema --push  # run 'git push' in the end
+sema         # commit changes in current repo
+```
+
+**NOTE:** the `--push` and `--add` flags can be combined, which will be
+equivalent to running the following:
+
+```bash
+git add .
+git commit -m "feat(*): commit description"
+git push
 ```
 
 ![label](img/label.png)
