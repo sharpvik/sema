@@ -12,7 +12,7 @@ type flagsStore struct {
 	more *bool
 }
 
-var flags = flagsStore{}
+var flags flagsStore
 
 func init() {
 	flags.help = getopt.BoolLong("help", 'h', "Display help message")
