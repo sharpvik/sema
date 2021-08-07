@@ -4,11 +4,18 @@ This is a simple command line tool inspired by [this gist][gist] about semantic
 commit messages. In short, it proposed to use labelled commit messages that
 derive their format from [Angular's commit rules][angular].
 
+[gist]: https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716
+[angular]: https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits
+
 The `sema` command will help you follow these guidelines with no effort on your
 part to memorise labels or double-check things.
 
-[gist]: https://gist.github.com/joshbuchea/6f47e86d2510bce28f8e7f42ae84c716
-[angular]: https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#commits
+**UPDATE**: `sema` is now in AUR! Install it with `pamac` (GUI) or `yay` as
+follows:
+
+```bash
+yay -S sema
+```
 
 ## Format
 
@@ -34,6 +41,14 @@ in a concise way, and `TYPE` is a short label from the following:
 
 ## Installation
 
+### From AUR (for Arch-based Linux)
+
+```bash
+yay -S sema
+```
+
+### Using the `go` tool
+
 ```bash
 go install github.com/sharpvik/sema  # => $GOPATH/bin/sema
 ```
@@ -54,7 +69,7 @@ git sema
 sema --help  # if you need a usage hint
 sema --more  # see all label descriptions
 sema --add   # run 'git add .' before all else
-sema --push  # run 'git push' in the end
+sema --push  # run 'git push' after sucessful commit
 sema         # commit changes in current repo
 ```
 
@@ -66,6 +81,8 @@ git add .
 git commit -m "feat(*): commit description"
 git push
 ```
+
+## Some Screenshots
 
 ![label](img/label.png)
 ![scope](img/scope.png)
