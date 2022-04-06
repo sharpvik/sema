@@ -14,9 +14,7 @@ VARIANTS = [
 
 
 def extension(os):
-    if os == 'windows':
-        return '.exe'
-    return ''
+    return '.exe' if os == 'windows' else ''
 
 
 def executable_name(os, arch):

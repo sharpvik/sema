@@ -4,20 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
-	"strings"
 
 	. "github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 )
-
-func more() {
-	var builder strings.Builder
-	builder.WriteString("Labels explained:\n\n")
-	for _, label := range labels {
-		builder.WriteString("    " + label.String() + "\n")
-	}
-	fmt.Println(builder.String())
-}
 
 func add() {
 	runCommandAndAbortOnError(exec.Command("git", "add", "."))
