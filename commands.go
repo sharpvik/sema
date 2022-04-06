@@ -3,11 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
-	. "github.com/logrusorgru/aurora"
-	"github.com/manifoldco/promptui"
-	"os"
 	"os/exec"
 	"strings"
+
+	. "github.com/logrusorgru/aurora"
+	"github.com/manifoldco/promptui"
 )
 
 func more() {
@@ -17,7 +17,6 @@ func more() {
 		builder.WriteString("    " + label.String() + "\n")
 	}
 	fmt.Println(builder.String())
-	os.Exit(0)
 }
 
 func add() {
