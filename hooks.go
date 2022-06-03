@@ -9,19 +9,12 @@ const commitHooksFilename = "./hooks.sema"
 
 func hooks() {
 	if commitHooksFileExists() {
-		prepareCommand().Run()
+		runCommandAndAbortOnError(exec.Command(commitHooksFilename))
 	}
 }
 
 func commitHooksFileExists() bool {
-	_, err := os.Open(commitHooksFilename)
+	file, err := os.Open(commitHooksFilename)
+	defer file.Close()
 	return err == nil
-}
-
-func prepareCommand() (cmd *exec.Cmd) {
-	cmd = exec.Command(commitHooksFilename)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	return
 }
