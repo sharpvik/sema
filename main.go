@@ -10,6 +10,7 @@ func init() {
 }
 
 func main() {
+	hooks()
 	if *flags.add {
 		add()
 	}

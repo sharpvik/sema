@@ -57,13 +57,15 @@ go install github.com/sharpvik/sema  # => $GOPATH/bin/sema
 
 **HACK:** After the default installation, the `sema` command will be available.
 However, if you rename that binary file to `git-sema`, you will be able to use
-it as follows (as if it's part of the default `git` tools):
+it as if it's part of the default `git` tools:
 
 ```bash
 git sema
 ```
 
 ## Usage
+
+### Overview
 
 ```bash
 sema --help  # if you need a usage hint
@@ -81,6 +83,19 @@ git add .
 git commit -m "feat(*): commit description"
 git push
 ```
+
+### Commit Hooks
+
+Sometimes we'd like to run a script before every commit. For example, I often
+forget to run `go fmt ./...` before publishing changes. To combat this issue,
+introducing **commit hooks**.
+
+Every time you run `sema`, it will look for a file called `hooks.sema` in the
+current working directory and attempt to execute it (make sure to give executive
+permissions to the hooks file).
+
+Of course, using `hooks.sema` is optional and its absence won't break anything.
+For a basic example of such a file, take a look at [`hooks.sema`](./hooks.sema).
 
 ## Some Screenshots
 
