@@ -53,7 +53,8 @@ yay -S sema
 go install github.com/sharpvik/sema  # => $GOPATH/bin/sema
 ```
 
-**NOTICE:** Make sure that your `$GOPATH/bin` is in `$PATH`!
+**NOTICE:** Both installation methods put `sema` binary into your `$GOPATH/bin`
+so make sure that your `$GOPATH/bin` is in `$PATH`!
 
 **HACK:** After the default installation, the `sema` command will be available.
 However, if you rename that binary file to `git-sema`, you will be able to use
