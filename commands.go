@@ -9,21 +9,21 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-func add() {
-	runCommandAndAbortOnError(exec.Command("git", "add", "."))
+func commitMessage() string {
+	return fmt.Sprintf("%s(%s): %s", label(), scope(), synopsis())
 }
 
-func commit() {
-	label := label()
-	scope := scope()
-	synopsis := message()
-	message := fmt.Sprintf("%s(%s): %s", label, scope, synopsis)
+func add() {
+	abortOnError(exec.Command("git", "add", "."))
+}
+
+func commit(message string) {
 	display(message)
-	runCommandAndAbortOnError(exec.Command("git", "commit", "-m", message))
+	abortOnError(exec.Command("git", "commit", "-m", message))
 }
 
 func push() {
-	runCommandAndAbortOnError(exec.Command("git", "push"))
+	abortOnError(exec.Command("git", "push"))
 }
 
 func label() (choice string) {
@@ -52,9 +52,9 @@ func scope() (scope string) {
 	return
 }
 
-func message() (msg string) {
+func synopsis() (message string) {
 	prompt := promptui.Prompt{Label: "Commit message"}
-	msg, err := prompt.Run()
+	message, err := prompt.Run()
 	abort(err)
 	return
 }

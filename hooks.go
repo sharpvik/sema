@@ -9,7 +9,7 @@ const commitHooksFilename = "./hooks.sema"
 
 func hooks() {
 	if commitHooksFileExists() {
-		runCommandAndAbortOnError(exec.Command(commitHooksFilename))
+		abortOnError(exec.Command(commitHooksFilename))
 	}
 }
 

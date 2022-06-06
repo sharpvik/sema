@@ -11,7 +11,7 @@ func abort(err error) {
 	}
 }
 
-func runCommandAndAbortOnError(cmd *exec.Cmd) {
+func abortOnError(cmd *exec.Cmd) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

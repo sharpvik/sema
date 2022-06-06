@@ -10,11 +10,12 @@ func init() {
 }
 
 func main() {
+	message := commitMessage()
 	hooks()
 	if *flags.add {
 		add()
 	}
-	commit()
+	commit(message)
 	if *flags.push {
 		push()
 	}
