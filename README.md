@@ -10,14 +10,14 @@ derive their format from [Angular's commit rules][angular].
 The `sema` command will help you follow these guidelines with no effort on your
 part to memorise labels or double-check things.
 
-**UPDATE**: `sema` is now in AUR! Install it with `pamac` (GUI) or `yay` as
-follows:
+## Contents
 
-```bash
-yay -S sema
-```
+1. [Format](#format)
+2. [Installation](#install)
+3. [Usage](#usage)
+4. [Screenshots](#demo)
 
-## Format
+## <a name="format"></a> Format
 
 Each commit message is supposed to be formatted in the following way:
 
@@ -39,7 +39,7 @@ in a concise way, and `TYPE` is a short label from the following:
 
 > You can see the list of these labels with explanations using `sema --more`.
 
-## Installation
+## <a name="install"></a> Installation
 
 ### From AUR (for Arch-based Linux)
 
@@ -53,30 +53,30 @@ yay -S sema
 go install github.com/sharpvik/sema  # => $GOPATH/bin/sema
 ```
 
-**NOTICE:** Both installation methods put `sema` binary into your `$GOPATH/bin`
-so make sure that your `$GOPATH/bin` is in `$PATH`!
+> Both installation methods put `sema` binary into your `$GOPATH/bin` so make
+> sure that your `$GOPATH/bin` is in `$PATH`!
 
-**HACK:** After the default installation, the `sema` command will be available.
-However, if you rename that binary file to `git-sema`, you will be able to use
-it as if it's part of the default `git` tools:
-
-```bash
-git sema
-```
-
-## Usage
+## <a name="usage"></a> Usage
 
 ### Overview
 
 ```bash
-sema --help  # if you need a usage hint
-sema --more  # see all label descriptions
-sema --add   # run 'git add .' before all else
-sema --push  # run 'git push' after sucessful commit
-sema         # commit changes in current repo
+Usage: sema [flags]
+
+ -a, --add      Begin with running 'git add'
+ -p, --push     Run 'git push' on successful commit
+ -f, --force    Add force push flag '-f' during 'git push'
+
+ -h, --help     Display help message
+ -m, --more     Explain commit types
+ -n, --version  Display installed version of sema
 ```
 
-**NOTE:** the `--push` and `--add` flags can be combined, which will be
+### Flag Combos
+
+#### Add & Push
+
+The `--push` and `--add` flags can be combined (or `-ap`), which will be
 equivalent to running the following:
 
 ```bash
@@ -85,6 +85,16 @@ git commit -m "feat(*): commit description"
 git push
 ```
 
+#### Force Push
+
+Adding the `--force` flag to `--push` (or `-pf`) runs forceful push:
+
+```bash
+git push -f
+```
+
+> The `--force` used without `--push` will be ignored.
+
 ### Commit Hooks
 
 Sometimes we'd like to run a script before every commit. For example, I often
@@ -92,13 +102,13 @@ forget to run `go fmt ./...` before publishing changes. To combat this issue,
 introducing **commit hooks**.
 
 Every time you run `sema`, it will look for a file called `hooks.sema` in the
-current working directory and attempt to execute it (make sure to give executive
-permissions to the hooks file).
+current working directory and attempt to execute it. Make sure to give executive
+permissions to the hooks file (consider `chmod +x hooks.sema`).
 
 Of course, using `hooks.sema` is optional and its absence won't break anything.
 For a basic example of such a file, take a look at [`hooks.sema`](./hooks.sema).
 
-## Some Screenshots
+## <a name="demo"></a> Screenshots
 
 ![label](img/label.png)
 ![scope](img/scope.png)

@@ -23,7 +23,11 @@ func commit(message string) {
 }
 
 func push() {
-	abortOnError(exec.Command("git", "push"))
+	args := []string{"push"}
+	if *flags.force {
+		args = append(args, "-f")
+	}
+	abortOnError(exec.Command("git", args...))
 }
 
 func label() (choice string) {

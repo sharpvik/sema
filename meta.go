@@ -7,7 +7,7 @@ import (
 
 const (
 	name       = "sema"
-	version    = "v0.2.4"
+	version    = "v0.3.0"
 	maintainer = "Viktor A. Rozenko Voitenko"
 	email      = "sharp.vik@gmail.com"
 )
