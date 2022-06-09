@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os/exec"
 
@@ -41,16 +40,7 @@ func label() (choice string) {
 }
 
 func scope() (scope string) {
-	valiadtor := func(input string) (err error) {
-		if len(input) > 15 {
-			return errors.New("input too long")
-		}
-		return
-	}
-	prompt := promptui.Prompt{
-		Label:    "Change scope",
-		Validate: valiadtor,
-	}
+	prompt := promptui.Prompt{Label: "Change scope"}
 	scope, err := prompt.Run()
 	abort(err)
 	return
