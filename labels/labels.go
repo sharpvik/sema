@@ -1,6 +1,9 @@
-package main
+package labels
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Label struct {
 	tag         string
@@ -11,7 +14,7 @@ func (label *Label) String() string {
 	return fmt.Sprintf("%-10s%s", label.tag, label.description)
 }
 
-var labels = [8]Label{
+var list = [8]Label{
 	{
 		tag:         "feat",
 		description: "new feature for the user",
@@ -46,10 +49,19 @@ var labels = [8]Label{
 	},
 }
 
-func tagsOnly() (tags []string) {
-	tags = make([]string, len(labels))
-	for i, label := range labels {
+func TagsOnly() (tags []string) {
+	tags = make([]string, len(list))
+	for i, label := range list {
 		tags[i] = label.tag
 	}
 	return
+}
+
+func Explain() {
+	var builder strings.Builder
+	builder.WriteString("Labels explained:\n\n")
+	for _, label := range list {
+		builder.WriteString("    " + label.String() + "\n")
+	}
+	fmt.Println(builder.String())
 }
