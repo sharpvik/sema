@@ -1,21 +1,27 @@
 package main
 
+import (
+	"github.com/sharpvik/sema/agent"
+)
+
 type pipeline struct {
-	commands []func()
+	commands []command
 }
 
-func pipe(commands ...func()) *pipeline {
+type command func() error
+
+func pipe(commands ...command) *pipeline {
 	return &pipeline{
 		commands: commands,
 	}
 }
 
-func (p *pipeline) then(commands ...func()) *pipeline {
+func (p *pipeline) then(commands ...command) *pipeline {
 	p.commands = append(p.commands, commands...)
 	return p
 }
 
-func (p *pipeline) thenIf(condition bool, commands ...func()) *pipeline {
+func (p *pipeline) thenIf(condition bool, commands ...command) *pipeline {
 	if condition {
 		p.then(commands...)
 	}
@@ -24,6 +30,6 @@ func (p *pipeline) thenIf(condition bool, commands ...func()) *pipeline {
 
 func (p *pipeline) run() {
 	for _, command := range p.commands {
-		command()
+		agent.AbortIfError(command())
 	}
 }

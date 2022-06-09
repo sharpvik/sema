@@ -34,40 +34,44 @@ func New(config *Config) *Agent {
 	}
 }
 
-func (r *Agent) Hooks() {
+func (r *Agent) Hooks() (err error) {
 	if commitHooksFileExists() {
-		abortOnError(exec.Command(commitHooksFilename))
+		return try(exec.Command(commitHooksFilename))
 	}
+	return
 }
 
-func (r *Agent) Title() {
+func (r *Agent) Title() (_ error) {
 	r.commitTitle = fmt.Sprintf("%s(%s): %s", label(), scope(), synopsis())
+	return
 }
 
-func (r *Agent) Add() {
-	abortOnError(exec.Command("git", "add", "."))
+func (r *Agent) Add() (err error) {
+	return try(exec.Command("git", "add", "."))
 }
 
-func (r *Agent) Commit() {
+func (r *Agent) Commit() (err error) {
 	if r.Config.Commit.Long {
-		r.longCommit()
+		return r.longCommit()
 	} else {
-		r.shortCommit()
+		return r.shortCommit()
 	}
 }
 
-func (r *Agent) Push() {
+func (r *Agent) Push() (err error) {
 	args := []string{"push"}
 	if r.Config.Push.Force {
 		args = append(args, "-f")
 	}
-	abortOnError(exec.Command("git", args...))
+	return try(exec.Command("git", args...))
 }
 
-func (r *Agent) longCommit() {
+func (r *Agent) longCommit() (err error) {
 	path, err := r.createCommitFile()
-	abort(err)
-	abortOnError(exec.Command("git", "commit", "-t", path))
+	if err != nil {
+		return
+	}
+	return try(exec.Command("git", "commit", "-t", path))
 }
 
 func (r *Agent) createCommitFile() (path string, err error) {
@@ -80,7 +84,7 @@ func (r *Agent) createCommitFile() (path string, err error) {
 	return file.Name(), err
 }
 
-func (r *Agent) shortCommit() {
+func (r *Agent) shortCommit() (err error) {
 	display(r.commitTitle)
-	abortOnError(exec.Command("git", "commit", "-m", r.commitTitle))
+	return try(exec.Command("git", "commit", "-m", r.commitTitle))
 }

@@ -2,15 +2,30 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/pborman/getopt/v2"
 )
 
 const (
 	name       = "sema"
-	version    = "v0.4.0"
+	version    = "v1.0.0"
 	maintainer = "Viktor A. Rozenko Voitenko"
 	email      = "sharp.vik@gmail.com"
+	url        = "https://github.com/sharpvik/sema"
 )
 
-func info() {
-	fmt.Printf("%s %s by %s <%s>\n\n", name, version, maintainer, email)
+func info() (_ error) {
+	fmt.Printf("%s %s by %s <%s>\n  💾 GitHub %s\n",
+		name, version, maintainer, email, url)
+	return
+}
+
+func usage() (_ error) {
+	getopt.Usage()
+	return
+}
+
+func newline() (_ error) {
+	fmt.Println()
+	return
 }

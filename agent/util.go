@@ -13,24 +13,24 @@ import (
 func label() (choice string) {
 	prompt := promptui.Select{
 		Label: "Select commit label",
-		Items: labels.TagsOnly(),
+		Items: labels.Explained(),
 	}
-	_, choice, err := prompt.Run()
-	abort(err)
-	return
+	i, _, err := prompt.Run()
+	AbortIfError(err)
+	return labels.Get(i).Name
 }
 
 func scope() (scope string) {
 	prompt := promptui.Prompt{Label: "Change scope"}
 	scope, err := prompt.Run()
-	abort(err)
+	AbortIfError(err)
 	return
 }
 
 func synopsis() (message string) {
 	prompt := promptui.Prompt{Label: "Commit message"}
 	message, err := prompt.Run()
-	abort(err)
+	AbortIfError(err)
 	return
 }
 
@@ -44,15 +44,15 @@ func commitHooksFileExists() bool {
 	return err == nil
 }
 
-func abort(err error) {
+func AbortIfError(err error) {
 	if err != nil {
 		os.Exit(1)
 	}
 }
 
-func abortOnError(cmd *exec.Cmd) {
+func try(cmd *exec.Cmd) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	abort(cmd.Run())
+	return cmd.Run()
 }

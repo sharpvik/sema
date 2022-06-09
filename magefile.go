@@ -1,10 +1,12 @@
 //go:build mage
 
-// Use this file to produce relase binaries for `sema`.
+// Use this file to produce release binaries for `sema`.
 // @ https://github.com/sharpvik/sema
 //
 // It relies on a build of the `mage` tool.
-// @ https://github.com/magefile/mage
+// $ git clone https://github.com/magefile/mage
+// $ cd mage
+// $ go run bootstrap.go
 //
 // Once you have `mage` command installed, you can run:
 // $ mage bins

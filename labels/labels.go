@@ -2,66 +2,60 @@ package labels
 
 import (
 	"fmt"
-	"strings"
 )
 
 type Label struct {
-	tag         string
-	description string
+	Name   string
+	Reason string
 }
 
 func (label *Label) String() string {
-	return fmt.Sprintf("%-10s%s", label.tag, label.description)
+	return fmt.Sprintf("%-10s%s", label.Name, label.Reason)
 }
 
 var list = [8]Label{
 	{
-		tag:         "feat",
-		description: "new feature for the user",
+		Name:   "feat",
+		Reason: "New feature",
 	},
 	{
-		tag:         "fix",
-		description: "bug fix for the user",
+		Name:   "fix",
+		Reason: "Bug fix",
 	},
 	{
-		tag:         "docs",
-		description: "changes to the documentation",
+		Name:   "docs",
+		Reason: "Documentation improvement",
 	},
 	{
-		tag:         "style",
-		description: "formatting with no production code change",
+		Name:   "style",
+		Reason: "Code formatting",
 	},
 	{
-		tag:         "refactor",
-		description: "refactoring production code",
+		Name:   "refactor",
+		Reason: "Code refactoring",
 	},
 	{
-		tag:         "test",
-		description: "adding missing tests, refactoring tests",
+		Name:   "test",
+		Reason: "Test suite improvement",
 	},
 	{
-		tag:         "perf",
-		description: "performance improvements",
+		Name:   "perf",
+		Reason: "Performance improvement",
 	},
 	{
-		tag:         "chore",
-		description: "updating grunt tasks",
+		Name:   "chore",
+		Reason: "Grunt task",
 	},
 }
 
-func TagsOnly() (tags []string) {
-	tags = make([]string, len(list))
+func Explained() (labels []string) {
+	labels = make([]string, len(list))
 	for i, label := range list {
-		tags[i] = label.tag
+		labels[i] = label.String()
 	}
 	return
 }
 
-func Explain() {
-	var builder strings.Builder
-	builder.WriteString("Labels explained:\n\n")
-	for _, label := range list {
-		builder.WriteString("    " + label.String() + "\n")
-	}
-	fmt.Println(builder.String())
+func Get(index int) Label {
+	return list[index]
 }
