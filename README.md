@@ -10,14 +10,33 @@ derive their format from [Angular's commit rules][angular].
 The `sema` command will help you follow these guidelines with no effort on your
 part to memorise labels or double-check things.
 
-## Contents
+## 🚨 Major Version Bump Notice
+
+### Breaking Changes
+
+Recent introduction of the first major release version `v1.0.0` carries a few
+**breaking changes** outlined here:
+
+1. Length limit of 15 characters has been removed from the **change scope**
+   field: _developer knows best_ (LOL).
+2. The `--more` flag is deprecated. Now, `sema` will show you label descriptions
+   during the selection process.
+3. The short version of the `--version` flag is now `-v` instead of `-n` for
+   obvious reasons.
+
+### Install with Homebrew
+
+From now on, you can install `sema` using Homebrew. Follow through to the
+[Installation](#install) section to learn more!
+
+## 🌎 Contents
 
 1. [Format](#format)
 2. [Installation](#install)
 3. [Usage](#usage)
 4. [Screenshots](#demo)
 
-## <a name="format"></a> Format
+## <a name="format"></a> 🍭 Format
 
 Each commit message is supposed to be formatted in the following way:
 
@@ -37,11 +56,15 @@ in a concise way, and `TYPE` is a short label from the following:
 - `perf`: performance improvements
 - `chore`: updating grunt tasks
 
-> You can see the list of these labels with explanations using `sema --more`.
+## <a name="install"></a> 🚀 Installation
 
-## <a name="install"></a> Installation
+### Homebrew
 
-### From AUR (for Arch-based Linux)
+```bash
+brew install sharpvik/sema/sema
+```
+
+### AUR (for Arch-based Linux)
 
 ```bash
 yay -S sema
@@ -50,26 +73,27 @@ yay -S sema
 ### Using the `go` tool
 
 ```bash
-go install github.com/sharpvik/sema  # => $GOPATH/bin/sema
+go install github.com/sharpvik/sema
 ```
 
 > Both installation methods put `sema` binary into your `$GOPATH/bin` so make
 > sure that your `$GOPATH/bin` is in `$PATH`!
 
-## <a name="usage"></a> Usage
+## <a name="usage"></a> 🔭 Usage
 
 ### Overview
 
 ```bash
 Usage: sema [flags]
 
- -a, --add      Begin with running 'git add'
- -p, --push     Run 'git push' on successful commit
- -f, --force    Add force push flag '-f' during 'git push'
+ -a, --add         Begin by running `git add`
+ -f, --force       Force push changes with `git push -f`
+ -l, --long        Open editor to elaborate commit message
+ -p, --push        Run `git push` on successful commit
 
- -h, --help     Display help message
- -m, --more     Explain commit types
- -n, --version  Display installed version of sema
+ -c, --contribute  Open sema GitHub repository in browser
+ -h, --help        Display help message
+ -v, --version     Display current version of sema
 ```
 
 ### Flag Combos
@@ -95,6 +119,18 @@ git push -f
 
 > The `--force` used without `--push` will be ignored.
 
+### Long Commits
+
+By default, `git commit` opens an editor in your terminal where you can write a
+commit message. For shorter commits, one could use `git commit -m "*****"`,
+which is the default mode of operation for `sema`.
+
+However, sometimes it is very beneficial to be able to elaborate your commit
+message instead of just posting a semantic title. For this use case, meet the
+new `--long` execution flag: after helping you come up with a semantic commit
+title, it will open an editor (with your title prepended at the top) and let you
+write some prose or poetry (whatever helps you get promotions).
+
 ### Commit Hooks
 
 Sometimes we'd like to run a script before every commit. For example, I often
@@ -108,9 +144,6 @@ permissions to the hooks file (consider `chmod +x hooks.sema`).
 Of course, using `hooks.sema` is optional and its absence won't break anything.
 For a basic example of such a file, take a look at [`hooks.sema`](./hooks.sema).
 
-## <a name="demo"></a> Screenshots
+## <a name="demo"></a> 🌌 Demo
 
-![label](img/label.png)
-![scope](img/scope.png)
-![message](img/message.png)
-![result](img/result.png)
+![demo](img/demo.gif)
