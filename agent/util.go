@@ -24,7 +24,7 @@ func scope() (scope string) {
 	prompt := promptui.Prompt{Label: "Change scope"}
 	scope, err := prompt.Run()
 	AbortIfError(err)
-	return
+	return bracketedOrEmpty(scope)
 }
 
 func synopsis() (message string) {
@@ -55,4 +55,11 @@ func try(cmd *exec.Cmd) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+func bracketedOrEmpty(label string) (l string) {
+	if label == "" {
+		return
+	}
+	return "(" + label + ")"
 }

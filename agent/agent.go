@@ -42,7 +42,7 @@ func (r *Agent) Hooks() (err error) {
 }
 
 func (r *Agent) Title() (_ error) {
-	r.commitTitle = fmt.Sprintf("%s(%s): %s", label(), scope(), synopsis())
+	r.commitTitle = fmt.Sprintf("%s%s: %s", label(), scope(), synopsis())
 	return
 }
 
