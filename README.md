@@ -89,6 +89,7 @@ Usage: sema [flags]
  -a, --add         Begin by running `git add`
  -f, --force       Force push changes with `git push -f`
  -l, --long        Open editor to elaborate commit message
+ -b, --breaking    Mark commit as introducing breaking changes
  -p, --push        Run `git push` on successful commit
 
  -c, --contribute  Open sema GitHub repository in browser
@@ -119,7 +120,26 @@ git push -f
 
 > The `--force` used without `--push` will be ignored.
 
-### Long Commits
+#### Breaking Changes
+
+The `--breaking` flag will append an exclamation point to the end of your commit
+label like so:
+
+```bash
+fix!(server): critical API change
+```
+
+On top of that, using `--breaking` with the [`--long`](#long) flag (or `-bl`),
+appends `BREAKING CHANGE` suffix to the commit template file for your
+convenience as follows:
+
+```bash
+fix!(server): critical API change
+
+BREAKING CHANGE: [elaborate on this breaking change here]
+```
+
+### <a name="long"></a> Long Commits
 
 By default, `git commit` opens an editor in your terminal where you can write a
 commit message. For shorter commits, one could use `git commit -m "*****"`,
