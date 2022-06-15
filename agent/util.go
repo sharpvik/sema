@@ -10,14 +10,14 @@ import (
 	"github.com/sharpvik/sema/labels"
 )
 
-func label() (choice string) {
+func (a *Agent) label() (choice string) {
 	prompt := promptui.Select{
 		Label: "Select commit label",
 		Items: labels.Explained(),
 	}
 	i, _, err := prompt.Run()
 	AbortIfError(err)
-	return labels.Get(i).Name
+	return labels.Get(i).Name + a.maybeBreakingExclam()
 }
 
 func scope() (scope string) {
@@ -57,9 +57,23 @@ func try(cmd *exec.Cmd) error {
 	return cmd.Run()
 }
 
-func bracketedOrEmpty(label string) (l string) {
+func bracketedOrEmpty(label string) string {
 	if label == "" {
-		return
+		return ""
 	}
 	return "(" + label + ")"
+}
+
+func (a *Agent) maybeBreakingExclam() string {
+	if a.Config.Commit.Breaking {
+		return "!"
+	}
+	return ""
+}
+
+func (a *Agent) maybeBreakingSuffix() string {
+	if a.Config.Commit.Breaking {
+		return "BREAKING CHANGE: \n"
+	}
+	return ""
 }

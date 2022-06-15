@@ -18,7 +18,8 @@ type (
 	}
 
 	Commit struct {
-		Long bool
+		Long     bool
+		Breaking bool
 	}
 
 	Push struct {
@@ -34,57 +35,57 @@ func New(config *Config) *Agent {
 	}
 }
 
-func (r *Agent) Hooks() (err error) {
+func (a *Agent) Hooks() (err error) {
 	if commitHooksFileExists() {
 		return try(exec.Command(commitHooksFilename))
 	}
 	return
 }
 
-func (r *Agent) Title() (_ error) {
-	r.commitTitle = fmt.Sprintf("%s%s: %s", label(), scope(), synopsis())
+func (a *Agent) Title() (_ error) {
+	a.commitTitle = fmt.Sprintf("%s%s: %s", a.label(), scope(), synopsis())
 	return
 }
 
-func (r *Agent) Add() (err error) {
+func (a *Agent) Add() (err error) {
 	return try(exec.Command("git", "add", "."))
 }
 
-func (r *Agent) Commit() (err error) {
-	if r.Config.Commit.Long {
-		return r.longCommit()
+func (a *Agent) Commit() (err error) {
+	if a.Config.Commit.Long {
+		return a.longCommit()
 	} else {
-		return r.shortCommit()
+		return a.shortCommit()
 	}
 }
 
-func (r *Agent) Push() (err error) {
+func (a *Agent) Push() (err error) {
 	args := []string{"push"}
-	if r.Config.Push.Force {
+	if a.Config.Push.Force {
 		args = append(args, "-f")
 	}
 	return try(exec.Command("git", args...))
 }
 
-func (r *Agent) longCommit() (err error) {
-	path, err := r.createCommitFile()
+func (a *Agent) longCommit() (err error) {
+	path, err := a.createCommitFile()
 	if err != nil {
 		return
 	}
 	return try(exec.Command("git", "commit", "-t", path))
 }
 
-func (r *Agent) createCommitFile() (path string, err error) {
+func (a *Agent) createCommitFile() (path string, err error) {
 	file, err := os.CreateTemp("", "sema-commit-template-")
 	if err != nil {
 		return
 	}
 	defer file.Close()
-	_, err = file.WriteString(r.commitTitle + "\n\n")
+	_, err = file.WriteString(a.commitTitle + "\n\n" + a.maybeBreakingSuffix())
 	return file.Name(), err
 }
 
-func (r *Agent) shortCommit() (err error) {
-	display(r.commitTitle)
-	return try(exec.Command("git", "commit", "-m", r.commitTitle))
+func (a *Agent) shortCommit() (err error) {
+	display(a.commitTitle)
+	return try(exec.Command("git", "commit", "-m", a.commitTitle))
 }
