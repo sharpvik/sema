@@ -39,13 +39,13 @@ func display(message string) {
 }
 
 func commitHooksFileExists() bool {
-	file, err := os.Open(commitHooksFilename)
-	defer file.Close()
+	_, err := os.Stat(commitHooksFilename)
 	return err == nil
 }
 
 func AbortIfError(err error) {
 	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }

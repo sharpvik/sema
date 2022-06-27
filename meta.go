@@ -8,7 +8,7 @@ import (
 
 const (
 	name       = "sema"
-	version    = "v1.1.0"
+	version    = "v1.1.1"
 	maintainer = "Viktor A. Rozenko Voitenko"
 	email      = "sharp.vik@gmail.com"
 	url        = "https://github.com/sharpvik/sema"

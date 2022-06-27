@@ -36,8 +36,11 @@ func New(config *Config) *Agent {
 }
 
 func (a *Agent) Hooks() (err error) {
-	if commitHooksFileExists() {
-		return try(exec.Command(commitHooksFilename))
+	if !commitHooksFileExists() {
+		return
+	}
+	if err := try(exec.Command(commitHooksFilename)); err != nil {
+		return fmt.Errorf("Commit hooks failed: %s", err)
 	}
 	return
 }
