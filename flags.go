@@ -50,7 +50,7 @@ func (f *flags) runner() *pipeline {
 
 func (f *flags) sema() *pipeline {
 	run := agent.New(f.config())
-	return pipe(run.Title, run.Hooks).
+	return pipe(run.Init, run.Title, run.Hooks).
 		thenIf(*f.add, run.Add).
 		then(run.Commit).
 		thenIf(*f.push, run.Push)

@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/go-git/go-git/v5"
 )
 
 type (
 	Agent struct {
 		Config      *Config
+		workTree    *git.Worktree
 		commitTitle string
 	}
 
@@ -35,6 +38,15 @@ func New(config *Config) *Agent {
 	}
 }
 
+func (a *Agent) Init() (err error) {
+	repo, err := git.PlainOpen(".")
+	if err != nil {
+		return
+	}
+	a.workTree, err = repo.Worktree()
+	return
+}
+
 func (a *Agent) Hooks() (err error) {
 	if !commitHooksFileExists() {
 		return
@@ -51,7 +63,7 @@ func (a *Agent) Title() (_ error) {
 }
 
 func (a *Agent) Add() (err error) {
-	return try(exec.Command("git", "add", "."))
+	return a.workTree.AddGlob(".")
 }
 
 func (a *Agent) Commit() (err error) {
