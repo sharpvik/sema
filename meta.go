@@ -8,7 +8,7 @@ import (
 
 const (
 	name       = "sema"
-	version    = "v1.1.1" // TODO: change in case of successful PR
+	version    = "v1.1.2-rc" // TODO: change in case of successful PR
 	maintainer = "Viktor A. Rozenko Voitenko"
 	email      = "sharp.vik@gmail.com"
 	url        = "https://github.com/sharpvik/sema"

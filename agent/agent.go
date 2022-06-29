@@ -51,8 +51,14 @@ func (a *Agent) Hooks() (err error) {
 	if !commitHooksFileExists() {
 		return
 	}
-	if err := try(exec.Command(commitHooksFilename)); err != nil {
-		return fmt.Errorf("Commit hooks failed: %s", err)
+	status, err := a.workTree.Status()
+	if err != nil {
+		return fmt.Errorf("failed to obtain repository status: %s", err)
+	}
+	for file := range status {
+		if _, err = a.workTree.Add(file); err != nil {
+			return fmt.Errorf("failed to stage file: %s", err)
+		}
 	}
 	return
 }
