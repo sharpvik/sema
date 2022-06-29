@@ -46,10 +46,12 @@ func (a *Agent) Init() (err error) {
 	return
 }
 
-func (a *Agent) Hooks() (err error) {
-	if !commitHooksFileExists() {
-		return
-	}
+func (a *Agent) Title() (_ error) {
+	a.commitTitle = fmt.Sprintf("%s%s: %s", a.label(), scope(), synopsis())
+	return
+}
+
+func (a *Agent) Add() (err error) {
 	status, err := a.workTree.Status()
 	if err != nil {
 		return fmt.Errorf("failed to obtain repository status: %s", err)
@@ -60,15 +62,6 @@ func (a *Agent) Hooks() (err error) {
 		}
 	}
 	return
-}
-
-func (a *Agent) Title() (_ error) {
-	a.commitTitle = fmt.Sprintf("%s%s: %s", a.label(), scope(), synopsis())
-	return
-}
-
-func (a *Agent) Add() (err error) {
-	return a.workTree.AddGlob(".")
 }
 
 func (a *Agent) Commit() (err error) {
@@ -94,9 +87,9 @@ func (a *Agent) longCommit() (err error) {
 	}
 	msg, err := editCommitTemplate(path)
 	if err != nil {
-		return fmt.Errorf("failed to open text editor: %s", err)
+		return fmt.Errorf("failed to edit template: %s", err)
 	}
-	_, err = a.workTree.Commit(msg, nil)
+	_, err = a.workTree.Commit(msg, new(git.CommitOptions))
 	return
 }
 
@@ -137,6 +130,6 @@ func readCommitMessageFromTemplate(path string) (msg string, err error) {
 
 func (a *Agent) shortCommit() (err error) {
 	display(a.commitTitle)
-	_, err = a.workTree.Commit(a.commitTitle, nil)
+	_, err = a.workTree.Commit(a.commitTitle, new(git.CommitOptions))
 	return
 }
