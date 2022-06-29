@@ -2,6 +2,7 @@ package agent
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 
@@ -29,8 +30,6 @@ type (
 		Force bool
 	}
 )
-
-const commitHooksFilename = "./hooks.sema"
 
 func New(config *Config) *Agent {
 	return &Agent{
@@ -89,14 +88,19 @@ func (a *Agent) Push() (err error) {
 }
 
 func (a *Agent) longCommit() (err error) {
-	path, err := a.createCommitFile()
+	path, err := a.createCommitTemplate()
 	if err != nil {
-		return
+		return fmt.Errorf("failed to create commit template file: %s", err)
 	}
-	return try(exec.Command("git", "commit", "-t", path))
+	msg, err := editCommitTemplate(path)
+	if err != nil {
+		return fmt.Errorf("failed to open text editor: %s", err)
+	}
+	_, err = a.workTree.Commit(msg, nil)
+	return
 }
 
-func (a *Agent) createCommitFile() (path string, err error) {
+func (a *Agent) createCommitTemplate() (path string, err error) {
 	file, err := os.CreateTemp("", "sema-commit-template-")
 	if err != nil {
 		return
@@ -106,7 +110,33 @@ func (a *Agent) createCommitFile() (path string, err error) {
 	return file.Name(), err
 }
 
+func editCommitTemplate(path string) (msg string, err error) {
+	if err = try(exec.Command(editor(), path)); err != nil {
+		return
+	}
+	return readCommitMessageFromTemplate(path)
+}
+
+func editor() (name string) {
+	output, err := exec.Command("git", "var", "GIT_EDITOR").Output()
+	if err != nil {
+		return defaultGitEditor
+	}
+	return string(output)
+}
+
+func readCommitMessageFromTemplate(path string) (msg string, err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	contents, err := io.ReadAll(file)
+	return string(contents), err
+}
+
 func (a *Agent) shortCommit() (err error) {
 	display(a.commitTitle)
-	return try(exec.Command("git", "commit", "-m", a.commitTitle))
+	_, err = a.workTree.Commit(a.commitTitle, nil)
+	return
 }
