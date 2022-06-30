@@ -162,7 +162,8 @@ current working directory and attempt to execute it. Make sure to give executive
 permissions to the hooks file (consider `chmod +x hooks.sema`).
 
 Of course, using `hooks.sema` is optional and its absence won't break anything.
-For a basic example of such a file, take a look at [`hooks.sema`](./hooks.sema).
+For a basic example of such a file, take a look at
+[`hooks.sema`](./example/hooks.sema).
 
 ## <a name="demo"></a> 🌌 Demo
 

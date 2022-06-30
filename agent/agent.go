@@ -2,13 +2,18 @@ package agent
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
+
+	"github.com/go-git/go-git/v5"
 )
 
 type (
 	Agent struct {
 		Config      *Config
+		repo        *git.Repository
+		workTree    *git.Worktree
 		commitTitle string
 	}
 
@@ -27,21 +32,18 @@ type (
 	}
 )
 
-const commitHooksFilename = "./hooks.sema"
-
 func New(config *Config) *Agent {
 	return &Agent{
 		Config: config,
 	}
 }
 
-func (a *Agent) Hooks() (err error) {
-	if !commitHooksFileExists() {
+func (a *Agent) Init() (err error) {
+	a.repo, err = git.PlainOpen(".")
+	if err != nil {
 		return
 	}
-	if err := try(exec.Command(commitHooksFilename)); err != nil {
-		return fmt.Errorf("Commit hooks failed: %s", err)
-	}
+	a.workTree, err = a.repo.Worktree()
 	return
 }
 
@@ -51,7 +53,16 @@ func (a *Agent) Title() (_ error) {
 }
 
 func (a *Agent) Add() (err error) {
-	return try(exec.Command("git", "add", "."))
+	status, err := a.workTree.Status()
+	if err != nil {
+		return fmt.Errorf("failed to obtain repository status: %s", err)
+	}
+	for file := range status {
+		if _, err = a.workTree.Add(file); err != nil {
+			return fmt.Errorf("failed to stage file: %s", err)
+		}
+	}
+	return
 }
 
 func (a *Agent) Commit() (err error) {
@@ -63,22 +74,25 @@ func (a *Agent) Commit() (err error) {
 }
 
 func (a *Agent) Push() (err error) {
-	args := []string{"push"}
-	if a.Config.Push.Force {
-		args = append(args, "-f")
-	}
-	return try(exec.Command("git", args...))
+	return a.repo.Push(&git.PushOptions{
+		Force: a.Config.Push.Force,
+	})
 }
 
 func (a *Agent) longCommit() (err error) {
-	path, err := a.createCommitFile()
+	path, err := a.createCommitTemplate()
 	if err != nil {
-		return
+		return fmt.Errorf("failed to create commit template file: %s", err)
 	}
-	return try(exec.Command("git", "commit", "-t", path))
+	msg, err := editCommitTemplate(path)
+	if err != nil {
+		return fmt.Errorf("failed to edit template: %s", err)
+	}
+	_, err = a.workTree.Commit(msg, new(git.CommitOptions))
+	return
 }
 
-func (a *Agent) createCommitFile() (path string, err error) {
+func (a *Agent) createCommitTemplate() (path string, err error) {
 	file, err := os.CreateTemp("", "sema-commit-template-")
 	if err != nil {
 		return
@@ -88,7 +102,33 @@ func (a *Agent) createCommitFile() (path string, err error) {
 	return file.Name(), err
 }
 
+func editCommitTemplate(path string) (msg string, err error) {
+	if err = try(exec.Command(editor(), path)); err != nil {
+		return
+	}
+	return readCommitMessageFromTemplate(path)
+}
+
+func editor() (name string) {
+	output, err := exec.Command("git", "var", "GIT_EDITOR").Output()
+	if err != nil {
+		return defaultGitEditor
+	}
+	return string(output)
+}
+
+func readCommitMessageFromTemplate(path string) (msg string, err error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+	contents, err := io.ReadAll(file)
+	return string(contents), err
+}
+
 func (a *Agent) shortCommit() (err error) {
 	display(a.commitTitle)
-	return try(exec.Command("git", "commit", "-m", a.commitTitle))
+	_, err = a.workTree.Commit(a.commitTitle, new(git.CommitOptions))
+	return
 }

@@ -38,11 +38,6 @@ func display(message string) {
 	fmt.Printf("Commit: %v\n\n", Green(message))
 }
 
-func commitHooksFileExists() bool {
-	_, err := os.Stat(commitHooksFilename)
-	return err == nil
-}
-
 func AbortIfError(err error) {
 	if err != nil {
 		fmt.Println(err)
