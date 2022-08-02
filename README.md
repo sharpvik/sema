@@ -12,17 +12,9 @@ part to memorise labels or double-check things.
 
 ## 🚨 Major Version Bump Notice
 
-### Breaking Changes
+### Breaking Changes for `v2.0.0`
 
-Recent introduction of the first major release version `v1.0.0` carries a few
-**breaking changes** outlined here:
-
-1. Length limit of 15 characters has been removed from the **change scope**
-   field: _developer knows best_ (LOL).
-2. The `--more` flag is deprecated. Now, `sema` will show you label descriptions
-   during the selection process.
-3. The short version of the `--version` flag is now `-v` instead of `-n` for
-   obvious reasons.
+1. Commit hooks are no longer supported due to cross-platform support issues.
 
 ### Install with Homebrew
 
@@ -76,8 +68,8 @@ yay -S sema
 go install github.com/sharpvik/sema
 ```
 
-> Both installation methods put `sema` binary into your `$GOPATH/bin` so make
-> sure that your `$GOPATH/bin` is in `$PATH`!
+> Both `yay` and `go` put `sema` binary into your `$GOPATH/bin` during
+> installation so make sure that your `$GOPATH/bin` is in `$PATH`!
 
 ## <a name="usage"></a> 🔭 Usage
 
@@ -150,20 +142,6 @@ message instead of just posting a semantic title. For this use case, meet the
 new `--long` execution flag: after helping you come up with a semantic commit
 title, it will open an editor (with your title prepended at the top) and let you
 write some prose or poetry (whatever helps you get promotions).
-
-### Commit Hooks
-
-Sometimes we'd like to run a script before every commit. For example, I often
-forget to run `go fmt ./...` before publishing changes. To combat this issue,
-introducing **commit hooks**.
-
-Every time you run `sema`, it will look for a file called `hooks.sema` in the
-current working directory and attempt to execute it. Make sure to give executive
-permissions to the hooks file (consider `chmod +x hooks.sema`).
-
-Of course, using `hooks.sema` is optional and its absence won't break anything.
-For a basic example of such a file, take a look at
-[`hooks.sema`](./example/hooks.sema).
 
 ## <a name="demo"></a> 🌌 Demo
 
