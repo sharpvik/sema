@@ -11,6 +11,7 @@ import (
 
 type (
 	Agent struct {
+		repo        *git.Repository
 		Config      *Config
 		workTree    *git.Worktree
 		commitTitle string
@@ -38,11 +39,12 @@ func New(config *Config) *Agent {
 }
 
 func (a *Agent) Init() (err error) {
-	repo, err := git.PlainOpen(".")
+	a.repo, err = git.PlainOpen(".")
 	if err != nil {
 		return
 	}
-	a.workTree, err = repo.Worktree()
+
+	a.workTree, err = a.repo.Worktree()
 	return
 }
 
@@ -72,12 +74,10 @@ func (a *Agent) Commit() (err error) {
 	}
 }
 
-func (a *Agent) Push() (err error) {
-	args := []string{"push"}
-	if a.Config.Push.Force {
-		args = append(args, "-f")
-	}
-	return try(exec.Command("git", args...))
+func (a *Agent) Push() error {
+	return a.repo.Push(&git.PushOptions{
+		Force: a.Config.Push.Force,
+	})
 }
 
 func (a *Agent) longCommit() (err error) {

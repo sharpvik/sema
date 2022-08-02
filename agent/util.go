@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	. "github.com/logrusorgru/aurora"
+	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	"github.com/sharpvik/sema/labels"
 )
@@ -35,7 +35,7 @@ func synopsis() (message string) {
 }
 
 func display(message string) {
-	fmt.Printf("Commit: %v\n\n", Green(message))
+	fmt.Printf("Commit: %v\n\n", aurora.Green(message))
 }
 
 func AbortIfError(err error) {
