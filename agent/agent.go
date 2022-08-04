@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/go-git/go-git/v5"
 )
@@ -115,7 +116,7 @@ func editor() (name string) {
 	if err != nil {
 		return defaultGitEditor
 	}
-	return string(output)
+	return strings.TrimSpace(string(output))
 }
 
 func readCommitMessageFromTemplate(path string) (msg string, err error) {
