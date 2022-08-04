@@ -10,16 +10,26 @@ derive their format from [Angular's commit rules][angular].
 The `sema` command will help you follow these guidelines with no effort on your
 part to memorise labels or double-check things.
 
-## 🚨 Major Version Bump Notice
+## 🚨 Important Notices
+
+### RSA Key Generation Specifics
+
+`sema` is implemented with the latest security standards in mind, therefore it
+requires users to set up their RSA keypair in the following way:
+
+```bash
+ssh-keygen -t ed25519       # (optionally) -C "your_email@example.com"
+eval "$(ssh-agent -s)"      # to start ssh-agent
+ssh-add ~/.ssh/id_ed25519  # (optionally on MacOS) --apple-use-keychain
+```
+
+> Failure to comply may result in errors during attempts to push changes to
+> remote repository.
 
 ### Breaking Changes for `v2.0.0`
 
-1. Commit hooks are no longer supported due to cross-platform support issues.
-
-### Install with Homebrew
-
-From now on, you can install `sema` using Homebrew. Follow through to the
-[Installation](#install) section to learn more!
+1. `sema` specific commit hooks are no longer supported due to cross-platform
+   support issues.
 
 ## 🌎 Contents
 
