@@ -7,6 +7,7 @@ import (
 	"os/exec"
 
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/config"
 )
 
 type (
@@ -29,6 +30,7 @@ type (
 
 	Push struct {
 		Force bool
+		Tags  bool
 	}
 )
 
@@ -75,7 +77,25 @@ func (a *Agent) Commit() (err error) {
 }
 
 func (a *Agent) Push() error {
+	err := gitError(a.repo.Push(&git.PushOptions{
+		Force: a.Config.Push.Force,
+	}))
+	if err != nil {
+		return gitError(err)
+	}
+
+	if a.Config.Push.Tags {
+		return gitError(a.pushTags())
+	}
+
+	return nil
+}
+
+func (a *Agent) pushTags() error {
 	return a.repo.Push(&git.PushOptions{
+		RefSpecs: []config.RefSpec{
+			config.RefSpec("refs/tags/*:refs/tags/*"),
+		},
 		Force: a.Config.Push.Force,
 	})
 }

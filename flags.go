@@ -15,6 +15,7 @@ type flags struct {
 	force    *bool
 	long     *bool
 	breaking *bool
+	tags     *bool
 
 	/* Meta flags that display information about the program. */
 	contribute *bool
@@ -28,6 +29,7 @@ func (f *flags) parse() *flags {
 	f.force = getopt.BoolLong("force", 'f', "Force push changes with `git push -f`")
 	f.long = getopt.BoolLong("long", 'l', "Open editor to elaborate commit message")
 	f.breaking = getopt.BoolLong("breaking", 'b', "Mark commit as introducing breaking changes")
+	f.tags = getopt.BoolLong("tags", 't', "Push tags along with commits")
 
 	f.version = getopt.BoolLong("version", 'v', "Display current version of sema")
 	f.help = getopt.BoolLong("help", 'h', "Display help message")
@@ -62,7 +64,10 @@ func (f *flags) config() *agent.Config {
 			Long:     *f.long,
 			Breaking: *f.breaking,
 		},
-		Push: agent.Push{Force: *f.force},
+		Push: agent.Push{
+			Force: *f.force,
+			Tags:  *f.tags,
+		},
 	}
 }
 

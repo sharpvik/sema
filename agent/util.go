@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/go-git/go-git/v5"
 	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
 	"github.com/sharpvik/sema/labels"
@@ -71,4 +72,11 @@ func (a *Agent) maybeBreakingSuffix() string {
 		return "BREAKING CHANGE: \n"
 	}
 	return ""
+}
+
+func gitError(err error) error {
+	if err == git.NoErrAlreadyUpToDate {
+		return nil
+	}
+	return err
 }
