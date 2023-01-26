@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/config"
 )
 
 type (
@@ -78,27 +77,14 @@ func (a *Agent) Commit() (err error) {
 }
 
 func (a *Agent) Push() error {
-	err := gitError(a.repo.Push(&git.PushOptions{
-		Force: a.Config.Push.Force,
-	}))
-	if err != nil {
-		return gitError(err)
+	args := []string{"push"}
+	if a.Config.Push.Force {
+		args = append(args, "--force")
 	}
-
 	if a.Config.Push.Tags {
-		return gitError(a.pushTags())
+		args = append(args, "--tags")
 	}
-
-	return nil
-}
-
-func (a *Agent) pushTags() error {
-	return a.repo.Push(&git.PushOptions{
-		RefSpecs: []config.RefSpec{
-			config.RefSpec("refs/tags/*:refs/tags/*"),
-		},
-		Force: a.Config.Push.Force,
-	})
+	return try(exec.Command("git", args...))
 }
 
 func (a *Agent) longCommit() (err error) {
@@ -110,7 +96,7 @@ func (a *Agent) longCommit() (err error) {
 	if err != nil {
 		return fmt.Errorf("failed to edit template: %s", err)
 	}
-	_, err = a.workTree.Commit(msg, new(git.CommitOptions))
+	_, err = a.workTree.Commit(msg, &git.CommitOptions{})
 	return
 }
 
@@ -151,6 +137,6 @@ func readCommitMessageFromTemplate(path string) (msg string, err error) {
 
 func (a *Agent) shortCommit() (err error) {
 	display(a.commitTitle)
-	_, err = a.workTree.Commit(a.commitTitle, new(git.CommitOptions))
+	_, err = a.workTree.Commit(a.commitTitle, &git.CommitOptions{})
 	return
 }
