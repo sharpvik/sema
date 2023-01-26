@@ -1,6 +1,5 @@
 package agent
 
 const (
-	commitHooksFilename = "./hooks.sema"
-	defaultGitEditor    = "nano"
+	defaultGitEditor = "vi"
 )
