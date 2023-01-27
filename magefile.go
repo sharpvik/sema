@@ -17,7 +17,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/magefile/mage/sh"
