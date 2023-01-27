@@ -30,4 +30,23 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+
+  publish-to-aur:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: "Publish AUR package"
+        uses: KSXGitHub/github-actions-deploy-aur@v2.2.5
+        with:
+          commit_email: "${{ secrets.AUR_EMAIL }}"
+          commit_message: "Update AUR package"
+          commit_username: "${{ secrets.AUR_USERNAME }}"
+          pkgbuild: ./PKGBUILD
+          pkgname: sema
+          ssh_keyscan_types: rsa,dsa,ecdsa,ed25519
+          ssh_private_key: "${{ secrets.AUR_SSH_PRIVATE_KEY }}"
+
           
