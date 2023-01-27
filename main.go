@@ -21,13 +21,13 @@ const (
 	tags     = "tags"
 )
 
-var Version string //* Set during build.
+var version string //* Set during build.
 
 var app = &cli.App{
 	Name:        "sema",
 	Usage:       "Semantic commits made simple",
 	Description: gitHubURL,
-	Version:     Version,
+	Version:     version,
 	Authors: []*cli.Author{{
 		Name:  "Viktor A. Rozenko Voitenko",
 		Email: "sharp.vik@gmail.com",

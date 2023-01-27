@@ -20,3 +20,5 @@ pkg/
 *.zst
 sema/
 src/
+
+dist/
