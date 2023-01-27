@@ -11,7 +11,10 @@ jobs:
   publish-to-aur:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: "Publish AUR package"
         uses: KSXGitHub/github-actions-deploy-aur@v2.2.5
         with:
