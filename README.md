@@ -10,17 +10,6 @@ derive their format from [Angular's commit rules][angular].
 The `sema` command will help you follow these guidelines with no effort on your
 part to memorise labels or double-check things.
 
-## 🚨 Major Version Bump Notice
-
-### Breaking Changes for `v2.0.0`
-
-1. Commit hooks are no longer supported due to cross-platform support issues.
-
-### Install with Homebrew
-
-From now on, you can install `sema` using Homebrew. Follow through to the
-[Installation](#install) section to learn more!
-
 ## 🌎 Contents
 
 1. [Format](#format)
@@ -47,6 +36,7 @@ in a concise way, and `TYPE` is a short label from the following:
 - `test`: adding missing tests, refactoring tests
 - `perf`: performance improvements
 - `chore`: updating grunt tasks
+- `infra`: infrastructural changes
 
 ## <a name="install"></a> 🚀 Installation
 
@@ -65,7 +55,7 @@ yay -S sema
 ### Using the `go` tool
 
 ```bash
-go install github.com/sharpvik/sema
+go install github.com/sharpvik/sema@latest
 ```
 
 > Both `yay` and `go` put `sema` binary into your `$GOPATH/bin` during
@@ -76,17 +66,25 @@ go install github.com/sharpvik/sema
 ### Overview
 
 ```bash
-Usage: sema [flags]
+NAME:
+   sema - Semantic commits made simple
 
- -a, --add         Begin by running `git add`
- -f, --force       Force push changes with `git push -f`
- -l, --long        Open editor to elaborate commit message
- -b, --breaking    Mark commit as introducing breaking changes
- -p, --push        Run `git push` on successful commit
+USAGE:
+   sema [global options] command [command options] [arguments...]
 
- -c, --contribute  Open sema GitHub repository in browser
- -h, --help        Display help message
- -v, --version     Display current version of sema
+COMMANDS:
+   github   Open sema GitHub repository in browser
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --add, -a       begin by running 'git add' (default: false)
+   --push, -p      run 'git push' on successful commit (default: false)
+   --force, -f     force push changes with 'git push -f' (default: false)
+   --long, -l      open editor to elaborate commit message (default: false)
+   --breaking, -b  mark commit as introducing breaking changes (default: false)
+   --tags, -t      push tags along with commits (default: false)
+   --help, -h      show help
+   --version, -v   print the version
 ```
 
 ### Flag Combos
