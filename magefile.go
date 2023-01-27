@@ -17,6 +17,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/magefile/mage/sh"
@@ -31,6 +32,25 @@ var variants = [5]struct {
 	{"windows", "amd64"},
 	{"linux", "386"},
 	{"windows", "386"},
+}
+
+func Bins() error {
+	if err := makeBinDir(); err != nil {
+		return err
+	}
+	return crossCompileAll()
+}
+
+func Install() error {
+	version, err := sh.Output("git", "describe", "--tags", "--abbrev=0")
+	if err != nil {
+		return err
+	}
+	_, err = sh.Output("go", "install", "-ldflags", "-X main.Version="+version)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func extension(os string) string {
@@ -51,7 +71,7 @@ func envMap(os, arch string) map[string]string {
 	}
 }
 
-func crossCompileAll() (err error) {
+func crossCompileAll() error {
 	for _, v := range variants {
 		_, err := sh.Exec(envMap(v.os, v.arch), os.Stdout, os.Stdout,
 			"go", "build", "-o", exectableName(v.os, v.arch), ".")
@@ -59,16 +79,9 @@ func crossCompileAll() (err error) {
 			return err
 		}
 	}
-	return
+	return nil
 }
 
 func makeBinDir() (err error) {
 	return os.MkdirAll("bin", 0777)
-}
-
-func Bins() (err error) {
-	if err = makeBinDir(); err != nil {
-		return
-	}
-	return crossCompileAll()
 }

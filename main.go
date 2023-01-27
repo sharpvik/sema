@@ -10,10 +10,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const (
-	Version   = "v3.0.0"
-	GitHubURL = "https://github.com/sharpvik/sema"
-)
+const gitHubURL = "https://github.com/sharpvik/sema"
 
 const (
 	add      = "add"
@@ -24,10 +21,12 @@ const (
 	tags     = "tags"
 )
 
+var Version string //* Set during build.
+
 var app = &cli.App{
 	Name:        "sema",
 	Usage:       "Semantic commits made simple",
-	Description: GitHubURL,
+	Description: gitHubURL,
 	Version:     Version,
 	Authors: []*cli.Author{{
 		Name:  "Viktor A. Rozenko Voitenko",
@@ -69,6 +68,7 @@ var app = &cli.App{
 			Usage:   "push tags along with commits",
 		},
 	},
+	UseShortOptionHandling: true,
 
 	Action: run,
 	Commands: []*cli.Command{{
@@ -103,7 +103,7 @@ func config(c *cli.Context) *agent.Config {
 func github(_ *cli.Context) error {
 	browser.Stdout = io.Discard
 	browser.Stderr = io.Discard
-	return browser.OpenURL(GitHubURL)
+	return browser.OpenURL(gitHubURL)
 }
 
 func main() {
