@@ -12,8 +12,8 @@ import (
 
 type (
 	Agent struct {
-		repo        *git.Repository
 		Config      *Config
+		repo        *git.Repository
 		workTree    *git.Worktree
 		commitTitle string
 	}
@@ -45,17 +45,16 @@ func (a *Agent) Init() (err error) {
 	if err != nil {
 		return
 	}
-
 	a.workTree, err = a.repo.Worktree()
 	return
 }
 
-func (a *Agent) Title() (_ error) {
+func (a *Agent) Title() error {
 	a.commitTitle = fmt.Sprintf("%s%s: %s", a.label(), scope(), synopsis())
-	return
+	return nil
 }
 
-func (a *Agent) Add() (err error) {
+func (a *Agent) Add() error {
 	status, err := a.workTree.Status()
 	if err != nil {
 		return fmt.Errorf("failed to obtain repository status: %s", err)
@@ -65,10 +64,10 @@ func (a *Agent) Add() (err error) {
 			return fmt.Errorf("failed to stage file: %s", err)
 		}
 	}
-	return
+	return nil
 }
 
-func (a *Agent) Commit() (err error) {
+func (a *Agent) Commit() error {
 	if a.Config.Commit.Long {
 		return a.longCommit()
 	} else {
@@ -87,7 +86,7 @@ func (a *Agent) Push() error {
 	return try(exec.Command("git", args...))
 }
 
-func (a *Agent) longCommit() (err error) {
+func (a *Agent) longCommit() error {
 	path, err := a.createCommitTemplate()
 	if err != nil {
 		return fmt.Errorf("failed to create commit template file: %s", err)
@@ -97,27 +96,27 @@ func (a *Agent) longCommit() (err error) {
 		return fmt.Errorf("failed to edit template: %s", err)
 	}
 	_, err = a.workTree.Commit(msg, &git.CommitOptions{})
-	return
+	return err
 }
 
-func (a *Agent) createCommitTemplate() (path string, err error) {
+func (a *Agent) createCommitTemplate() (string, error) {
 	file, err := os.CreateTemp("", "sema-commit-template-")
 	if err != nil {
-		return
+		return "", err
 	}
 	defer file.Close()
 	_, err = file.WriteString(a.commitTitle + "\n\n" + a.maybeBreakingSuffix())
 	return file.Name(), err
 }
 
-func editCommitTemplate(path string) (msg string, err error) {
-	if err = try(exec.Command(editor(), path)); err != nil {
-		return
+func editCommitTemplate(path string) (string, error) {
+	if err := try(exec.Command(editor(), path)); err != nil {
+		return "", err
 	}
 	return readCommitMessageFromTemplate(path)
 }
 
-func editor() (name string) {
+func editor() string {
 	output, err := exec.Command("git", "var", "GIT_EDITOR").Output()
 	if err != nil {
 		return defaultGitEditor
@@ -125,18 +124,18 @@ func editor() (name string) {
 	return strings.TrimSpace(string(output))
 }
 
-func readCommitMessageFromTemplate(path string) (msg string, err error) {
+func readCommitMessageFromTemplate(path string) (string, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return
+		return "", nil
 	}
 	defer file.Close()
 	contents, err := io.ReadAll(file)
 	return string(contents), err
 }
 
-func (a *Agent) shortCommit() (err error) {
+func (a *Agent) shortCommit() error {
 	display(a.commitTitle)
-	_, err = a.workTree.Commit(a.commitTitle, &git.CommitOptions{})
-	return
+	_, err := a.workTree.Commit(a.commitTitle, &git.CommitOptions{})
+	return err
 }
