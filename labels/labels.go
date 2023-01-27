@@ -4,16 +4,7 @@ import (
 	"fmt"
 )
 
-type Label struct {
-	Name   string
-	Reason string
-}
-
-func (label *Label) String() string {
-	return fmt.Sprintf("%-10s%s", label.Name, label.Reason)
-}
-
-var list = [8]Label{
+var list = [9]Label{
 	{
 		Name:   "feat",
 		Reason: "New feature",
@@ -46,6 +37,19 @@ var list = [8]Label{
 		Name:   "chore",
 		Reason: "Grunt task",
 	},
+	{
+		Name:   "infra",
+		Reason: "Infrastructural changes",
+	},
+}
+
+type Label struct {
+	Name   string
+	Reason string
+}
+
+func (label *Label) String() string {
+	return fmt.Sprintf("%-10s%s", label.Name, label.Reason)
 }
 
 func Explained() (labels []string) {
