@@ -55,7 +55,7 @@ yay -S sema
 ### Using the `go` tool
 
 ```bash
-go install github.com/sharpvik/sema@latest
+go install github.com/sharpvik/sema/v3
 ```
 
 > Both `yay` and `go` put `sema` binary into your `$GOPATH/bin` during
