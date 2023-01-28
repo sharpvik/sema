@@ -1,4 +1,4 @@
-module github.com/sharpvik/sema
+module github.com/sharpvik/sema/v3
 
 go 1.19
 

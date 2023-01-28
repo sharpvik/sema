@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/pkg/browser"
-	"github.com/sharpvik/sema/agent"
+	"github.com/sharpvik/sema/v3/agent"
 	"github.com/urfave/cli/v2"
 )
 
@@ -21,7 +21,7 @@ const (
 	tags     = "tags"
 )
 
-var version string //* Set during build.
+var version = "unknown"
 
 var app = &cli.App{
 	Name:        "sema",

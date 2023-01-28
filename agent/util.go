@@ -7,7 +7,7 @@ import (
 
 	"github.com/logrusorgru/aurora"
 	"github.com/manifoldco/promptui"
-	"github.com/sharpvik/sema/labels"
+	"github.com/sharpvik/sema/v3/labels"
 )
 
 const defaultGitEditor = "vi"
