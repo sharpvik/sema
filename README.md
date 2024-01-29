@@ -161,4 +161,4 @@ write some prose or poetry (whatever helps you get promotions).
 
 ## <a name="demo"></a> 🌌 Demo
 
-![demo](img/demo.gif)
+https://github.com/sharpvik/sema/assets/23066595/37274ab5-7d50-4c43-b4ea-ab048e434674
