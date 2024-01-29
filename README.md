@@ -40,6 +40,21 @@ in a concise way, and `TYPE` is a short label from the following:
 
 ## <a name="install"></a> 🚀 Installation
 
+### Mage (Recommended)
+
+Install [Mage](https://magefile.org/) whichever way you like, then run the
+following:
+
+```bash
+git clone git@github.com:sharpvik/sema.git
+cd sema
+mage install
+```
+
+> This way is recommended because my automated publishing pipelines for Homebrew
+> and AUR may break but with `mage` you can always get the latest version no
+> matter what and cross-platform. The builds are fast and clean.
+
 ### Homebrew
 
 ```bash
@@ -53,6 +68,9 @@ yay -S sema
 ```
 
 ### Using the `go` tool
+
+This will not insert the latest version into the binary, so `sema --version`
+will give you nothing, but it's simpler than the recommended `mage` install.
 
 ```bash
 go install github.com/sharpvik/sema/v3
