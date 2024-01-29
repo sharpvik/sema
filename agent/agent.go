@@ -55,16 +55,7 @@ func (a *Agent) Title() error {
 }
 
 func (a *Agent) Add() error {
-	status, err := a.workTree.Status()
-	if err != nil {
-		return fmt.Errorf("failed to obtain repository status: %s", err)
-	}
-	for file := range status {
-		if _, err = a.workTree.Add(file); err != nil {
-			return fmt.Errorf("failed to stage file: %s", err)
-		}
-	}
-	return nil
+	return try(exec.Command("git", "add", "."))
 }
 
 func (a *Agent) Commit() error {
